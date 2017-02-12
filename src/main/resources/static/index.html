@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>testtask</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('input[name=is-alive-button]').click(function () {
+                $.ajax({
+                            url: "health",
+                            type: "GET"
+
+                        })
+                        .done(function (data, textStatus, jqXHR) {
+                            if (jqXHR.status == 200) {
+                                $('label[name=is-alive]').text('true);
+                            } else {
+                                $('label[name=is-alive]').text('false');
+                            }
+                        })
+                        .fail(function (xhr, status, errorThrown) {
+                            alert("Sorry, there was a problem!");
+                            console.log("Error: " + errorThrown);
+                            console.log("Status: " + status);
+                        });
+            });
+
+            $('input[name=validate-button]').click(function () {
+                $.ajax({
+                            url: "validate",
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({
+                                diapasonMin: $('input[name=diapason-min]').val(),
+                                diapasonMax: $('input[name=diapason-max]').val(),
+                                range: $('input[name=range]').val()
+                            }),
+                            dataType: "json"
+
+                        })
+                        .done(function (data, textStatus, jqXHR) {
+                            if (jqXHR.status == 200) {
+                                $('label[name=validate]').text(data);
+                            } else {
+                                $('label[name=validate]').text('ERROR');
+                            }
+                        })
+                        .fail(function (xhr, status, errorThrown) {
+                            /*
+                            * I use the same error to for any validation error but
+                            * it is possible to map errors to te corresponding inputs
+                            * */
+                            alert("Error by range validation! " + errorThrown);
+                            console.log("Error: " + errorThrown);
+                            console.log("Status: " + status);
+                        });
+            });
+
+        });
+
+    </script>
+</head>
+<body>
+<div>
+    <input type="button" value="Is Alive" name="is-alive-button"/><label name="is-alive">&nbsp;</label>
+</div>
+<hr>
+<div>Validation form:</div>
+<div>
+    <table>
+        <tr>
+            <td><label>Diapason Min:</label></td>
+            <td><input type="text" name="diapason-min" maxlength="10"></td>
+        </tr>
+        <tr>
+            <td><label>Diapason Max:</label></td>
+            <td><input type="text" name="diapason-max" maxlength="10"></td>
+        </tr>
+        <tr>
+            <td><label>Range:</label></td>
+            <td><input type="text" name="range"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="Validate" name="validate-button"/></td>
+            <td><label name="validate">&nbsp;</label></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
