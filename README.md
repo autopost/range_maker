@@ -16,3 +16,6 @@ diapason” <br>
 How to run
 - Import project as Maven and run TestTaskApplication class. 
 - Or import project, mvn clean install, deploy artefact to your local Tomcat.
+
+Open URL in the browser
+http://127.0.0.1:8080/index.html
